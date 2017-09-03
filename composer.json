@@ -1,0 +1,11 @@
+{
+    "require-dev": {
+        "phpunit/phpunit": "^6.3"
+    },
+    "require": {
+        "Silex/Silex": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {"Shortener\\": "src/"}
+    }
+}
