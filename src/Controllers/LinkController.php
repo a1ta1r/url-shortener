@@ -39,12 +39,13 @@ class LinkController extends BaseController
         if ($user == false) {
             return $this->authRequired();
         }
-        $link = $this->linkRepository->addLink($user->id, $full_link);
+        try {
+            $link = $this->linkRepository->addLink($user->id, $full_link);
+        } catch (\PDOException $ex) {
+            return $this->error('Insufficient data. "full_link" is required');
+        }
         return new JsonResponse(
-            [
-                'full_link' => $link->fullLink,
-                'short_link' => $link->shortLink
-            ], Response::HTTP_CREATED
+            $link, Response::HTTP_CREATED
         );
     }
 
@@ -67,8 +68,8 @@ class LinkController extends BaseController
                 [
                     'id' => $link->id,
                     'user_id' => $link->user_id,
-                    'full_link' => $link->fullLink,
-                    'short_link' => $link->shortLink,
+                    'full_link' => $link->full_link,
+                    'short_link' => $link->short_link,
                     'clicks' => $clickCount
                 ], Response::HTTP_OK
             );
@@ -120,7 +121,7 @@ class LinkController extends BaseController
         $link = $this->linkRepository->getLinkByShortUrl($url);
         if ($link !== false) {
             $this->clickRepository->addClick($link->id, $referer);
-            return new RedirectResponse($link->fullLink);
+            return new RedirectResponse($link->full_link);
         } else {
             return new JsonResponse(null, Response::HTTP_NOT_FOUND);
         }

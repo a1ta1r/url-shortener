@@ -69,15 +69,15 @@ class LinkRepository extends BaseRepository
             if ($link->id === 0) {
                 $stmt = $this->getDb()->prepare("INSERT INTO Links (user_id, full_link, short_link) VALUES (:ui, :fl, :sl)");
                 $stmt->bindParam(':ui', $link->user_id);
-                $stmt->bindParam(':fl', $link->fullLink);
-                $stmt->bindParam(':sl', $link->shortLink);
+                $stmt->bindParam(':fl', $link->full_link);
+                $stmt->bindParam(':sl', $link->short_link);
                 $stmt->execute();
                 $link->id = $this->getDb()->lastInsertId();
-                $link->shortLink = $this->generateShortLinkById($link->id);
+                $link->short_link = $this->generateShortLinkById($link->id);
                 $this->saveLink($link);
             } else {
                 $stmt = $this->getDb()->prepare("UPDATE Links SET short_link = :sl WHERE id = :i");
-                $stmt->bindParam(':sl', $link->shortLink);
+                $stmt->bindParam(':sl', $link->short_link);
                 $stmt->bindParam(':i', intval($link->id));
                 $stmt->execute();
             }
