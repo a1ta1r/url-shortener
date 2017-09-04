@@ -15,6 +15,10 @@ class Click
         $this->id = $id;
         $this->link_id = $link_id;
         $this->click_time = $click_time;
-        $this->referer = $referer;
+        if ($referer == null) {
+            $this->referer = "Unknown";
+        } else {
+            $this->referer = $referer;
+        }
     }
 }

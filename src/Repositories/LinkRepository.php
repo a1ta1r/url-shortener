@@ -13,6 +13,11 @@ use Shortener\Models\Link;
 
 class LinkRepository extends BaseRepository
 {
+    /**
+     * @param $user_id
+     * @param $full_link
+     * @return Link
+     */
     public function addLink($user_id, $full_link)
     {
         $link = new Link(0, $user_id, $full_link, '');
@@ -20,6 +25,10 @@ class LinkRepository extends BaseRepository
         return $link;
     }
 
+    /**
+     * @param $id
+     * @return bool|Link
+     */
     public function getLinkById($id)
     {
         $stmt = $this->getDb()->prepare("SELECT id, user_id, full_link, short_link FROM Links WHERE id = :i LIMIT 1");
@@ -33,6 +42,10 @@ class LinkRepository extends BaseRepository
         }
     }
 
+    /**
+     * @param $user_id
+     * @return array|bool
+     */
     public function getLinksByUserId($user_id)
     {
         $stmt = $this->getDb()->prepare("SELECT id, user_id, full_link, short_link FROM Links WHERE user_id = :ui");
@@ -50,6 +63,10 @@ class LinkRepository extends BaseRepository
         }
     }
 
+    /**
+     * @param $url
+     * @return bool|Link
+     */
     public function getLinkByShortUrl($url)
     {
         $stmt = $this->getDb()->prepare("SELECT id, user_id, full_link, short_link FROM Links WHERE short_link = :sl LIMIT 1");
@@ -63,6 +80,9 @@ class LinkRepository extends BaseRepository
         }
     }
 
+    /**
+     * @param Link $link
+     */
     public function saveLink(Link &$link)
     {
         if ($link != null) {
@@ -84,6 +104,10 @@ class LinkRepository extends BaseRepository
         }
     }
 
+    /**
+     * @param $id
+     * @return bool|Link
+     */
     public function deleteLinkById($id)
     {
         $link = $this->getLinkById($id);
@@ -91,12 +115,16 @@ class LinkRepository extends BaseRepository
             $stmt = $this->getDb()->prepare("DELETE FROM Links WHERE id = :i LIMIT 1");
             $stmt->bindParam(':i', $id);
             $stmt->execute();
-            return true;
+            return $link;
         } else {
             return false;
         }
     }
 
+    /**
+     * @param $id
+     * @return null|string
+     */
     public function generateShortLinkById($id)
     {
         $symbols = 'qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM';

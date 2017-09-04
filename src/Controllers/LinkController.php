@@ -25,7 +25,8 @@ class LinkController extends BaseController
     public function __construct(
         UserRepository $userRepository,
         LinkRepository $linkRepository,
-        ClickRepository $clickRepository)
+        ClickRepository $clickRepository
+    )
     {
         parent::__construct($userRepository);
         $this->linkRepository = $linkRepository;
@@ -58,9 +59,7 @@ class LinkController extends BaseController
         }
         $link = $this->linkRepository->getLinkById($id);
         if ($link == false) {
-            return new JsonResponse(
-                null, Response::HTTP_NOT_FOUND
-            );
+            return $this->notFound();
         }
         if ($link->user_id == $user->id) {
             $clickCount = count($this->clickRepository->getClicksByLinkId($link->id));
@@ -74,25 +73,24 @@ class LinkController extends BaseController
                 ], Response::HTTP_OK
             );
         } else {
-            return $this->authRequired();
+            return $this->notFound();
         }
     }
 
     public function deleteLink(Request $request)
     {
-        $user = $this->getUserByBasicAuth($request)->id;
+        $user = $this->getUserByBasicAuth($request);
         if ($user == false) {
             return $this->authRequired();
         }
         $id = $request->get('id');
-        if ($this->linkRepository->deleteLinkById($id)) {
+        $link = $this->linkRepository->deleteLinkById($id);
+        if ($link != false && $user->id == $link->user_id) {
             return new JsonResponse(
-                null, Response::HTTP_OK
+                $link, Response::HTTP_OK
             );
         } else {
-            return new JsonResponse(
-                null, Response::HTTP_NOT_FOUND
-            );
+            return $this->notFound();
         }
     }
 
@@ -109,8 +107,8 @@ class LinkController extends BaseController
             );
         } else {
             return new JsonResponse(
-                null, Response::HTTP_NOT_FOUND
-            );
+                null,
+                Response::HTTP_NO_CONTENT);
         }
     }
 
@@ -123,7 +121,7 @@ class LinkController extends BaseController
             $this->clickRepository->addClick($link->id, $referer);
             return new RedirectResponse($link->full_link);
         } else {
-            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+            return $this->notFound();
         }
     }
 }

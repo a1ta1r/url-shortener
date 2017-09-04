@@ -22,7 +22,11 @@ class ClickController extends BaseController
     private $linkRepository;
     private $clickRepository;
 
-    public function __construct(UserRepository $userRepository, LinkRepository $linkRepository, ClickRepository $clickRepository)
+    public function __construct(
+        UserRepository $userRepository,
+        LinkRepository $linkRepository,
+        ClickRepository $clickRepository
+    )
     {
         parent::__construct($userRepository);
         $this->linkRepository = $linkRepository;
@@ -39,7 +43,7 @@ class ClickController extends BaseController
         }
         $link = $this->linkRepository->getLinkById($id);
         if ($link === false) {
-            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+            return $this->notFound();
         }
         if ($link->user_id != $user->id) {
             return $this->authRequired();
@@ -50,45 +54,20 @@ class ClickController extends BaseController
 
     public function getDaysReport(Request $request)
     {
-        $link_id = $request->get('id');
-        $user = $this->getUserByBasicAuth($request);
-        if ($user == false) {
-            return $this->authRequired();
-        }
-        $link = $this->linkRepository->getLinkById($link_id);
-        if ($link == false) {
-            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
-        }
-        if ($link->user_id != $user->id) {
-            return $this->authRequired();
-        }
-        $from = strtotime($request->get('from_date'));
-        $to = strtotime($request->get('to_date'));
-        $report = $this->clickRepository->getReportOnLinkClickCount($link_id, $from, $to, 'days');
-        return new JsonResponse($report, Response::HTTP_OK);
+        return $this->getReport($request, 'days');
     }
 
     public function getHoursReport(Request $request)
     {
-        $link_id = $request->get('id');
-        $user = $this->getUserByBasicAuth($request);
-        if ($user == false) {
-            return $this->authRequired();
-        }
-        $link = $this->linkRepository->getLinkById($link_id);
-        if ($link == false) {
-            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
-        }
-        if ($link->user_id != $user->id) {
-            return $this->authRequired();
-        }
-        $from = strtotime($request->get('from_date'));
-        $to = strtotime($request->get('to_date'));
-        $report = $this->clickRepository->getReportOnLinkClickCount($link_id, $from, $to, 'hours');
-        return new JsonResponse($report, Response::HTTP_OK);
+        return $this->getReport($request, 'hours');
     }
 
     public function getMinReport(Request $request)
+    {
+        return $this->getReport($request, 'min');
+    }
+
+    private function getReport(Request $request, $reportType)
     {
         $link_id = $request->get('id');
         $user = $this->getUserByBasicAuth($request);
@@ -97,14 +76,14 @@ class ClickController extends BaseController
         }
         $link = $this->linkRepository->getLinkById($link_id);
         if ($link == false) {
-            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+            return $this->notFound();
         }
         if ($link->user_id != $user->id) {
             return $this->authRequired();
         }
         $from = strtotime($request->get('from_date'));
         $to = strtotime($request->get('to_date'));
-        $report = $this->clickRepository->getReportOnLinkClickCount($link_id, $from, $to, 'min');
+        $report = $this->clickRepository->getReportOnLinkClickCount($link_id, $from, $to, $reportType);
         return new JsonResponse($report, Response::HTTP_OK);
     }
 

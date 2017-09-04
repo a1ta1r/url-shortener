@@ -21,7 +21,12 @@ $app['db'] = Connection::getPDO();
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-$app->before(function (Request $request) {
+$app->before(function (Request $request, $app) {
+    if ($app['db'] == false)
+        return new \Symfony\Component\HttpFoundation\JsonResponse(
+            ['error' => 'could not connect to database'],
+            \Symfony\Component\HttpFoundation\Response::HTTP_SERVICE_UNAVAILABLE
+        );
     if (strpos($request->headers->get('Content-Type'), 'application/json') == 0) {
         $data = json_decode($request->getContent(), true);
         $request->request->replace(is_array($data) ? $data : array());

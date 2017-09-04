@@ -19,7 +19,7 @@ abstract class BaseRepository
     }
 
     /**
-     * @return mixed
+     * @return \PDO
      */
     public function getDb()
     {

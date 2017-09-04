@@ -13,6 +13,12 @@ use Shortener\Models\User;
 
 class UserRepository extends BaseRepository
 {
+    /**
+     * @param $email
+     * @param $name
+     * @param $password
+     * @return User
+     */
     public function addUser($email, $name, $password)
     {
         $hash = password_hash($password, PASSWORD_BCRYPT);
@@ -21,6 +27,9 @@ class UserRepository extends BaseRepository
         return $user;
     }
 
+    /**
+     * @param User $user
+     */
     public function saveUser(User &$user)
     {
         if ($user != null) {
@@ -39,6 +48,10 @@ class UserRepository extends BaseRepository
         }
     }
 
+    /**
+     * @param $email
+     * @return bool|User
+     */
     public function getUserByEmail($email)
     {
         $stmt = $this->getDb()->prepare("SELECT id, email, name, passhash FROM Users WHERE email = :e LIMIT 1");

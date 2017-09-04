@@ -22,6 +22,10 @@ abstract class BaseController
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param Request $request
+     * @return bool|\Shortener\Models\User
+     */
     protected function getUserByBasicAuth(Request $request)
     {
         $email = $request->server->get('PHP_AUTH_USER');
@@ -50,6 +54,14 @@ abstract class BaseController
         return new JsonResponse(
             ['error' => $ex],
             Response::HTTP_UNPROCESSABLE_ENTITY
+        );
+    }
+
+    protected function notFound()
+    {
+        return new JsonResponse(
+            ['error' => 'resource not found'],
+            Response::HTTP_NOT_FOUND
         );
     }
 }

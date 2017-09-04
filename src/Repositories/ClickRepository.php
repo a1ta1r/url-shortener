@@ -18,6 +18,11 @@ class ClickRepository extends BaseRepository
     private $hour = 3600;
     private $minute = 60;
 
+    /**
+     * @param $link_id
+     * @param $referer
+     * @return Click
+     */
     public function addClick($link_id, $referer)
     {
         $click = new Click(null, $link_id, time(), $referer);
@@ -31,6 +36,10 @@ class ClickRepository extends BaseRepository
         return $click;
     }
 
+    /**
+     * @param $link_id
+     * @return array
+     */
     public function getClicksByLinkId($link_id)
     {
         $stmt = $this->getDb()->prepare("SELECT id, link_id, click_time, referer FROM Clicks WHERE link_id = :li");
@@ -44,6 +53,13 @@ class ClickRepository extends BaseRepository
         return $clicks;
     }
 
+    /**
+     * @param $link_id
+     * @param $from
+     * @param $to
+     * @param $type
+     * @return array|null
+     */
     public function getReportOnLinkClickCount($link_id, $from, $to, $type)
     {
         if ($from > $to)
@@ -117,6 +133,12 @@ class ClickRepository extends BaseRepository
         }
     }
 
+    /**
+     * @param $days
+     * @param $from
+     * @param $to
+     * @return array
+     */
     public function countByDays($days, $from, $to)
     {
         $count = array();
@@ -129,10 +151,16 @@ class ClickRepository extends BaseRepository
         return $count;
     }
 
+    /**
+     * @param $hours
+     * @param $from
+     * @param $to
+     * @return array
+     */
     public function countByHours($hours, $from, $to)
     {
         $count = array();
-        for ($i = $from; $i <= $to  + $this->day - $this->hour; $i += $this->hour) {
+        for ($i = $from; $i <= $to; $i += $this->hour) {
             $count[date('Y-m-d H', $i)] = 0;
         }
         foreach (array_keys($hours) as $hour) {
@@ -141,10 +169,16 @@ class ClickRepository extends BaseRepository
         return $count;
     }
 
+    /**
+     * @param $mins
+     * @param $from
+     * @param $to
+     * @return array
+     */
     public function countByMin($mins, $from, $to)
     {
         $count = array();
-        for ($i = $from; $i <= $to  + $this->day - $this->minute; $i += $this->minute) {
+        for ($i = $from; $i <= $to; $i += $this->minute) {
             $count[date('Y-m-d H:i', $i)] = 0;
         }
         foreach (array_keys($mins) as $min) {
@@ -153,6 +187,10 @@ class ClickRepository extends BaseRepository
         return $count;
     }
 
+    /**
+     * @param $link_id
+     * @return array
+     */
     public function getLinkTopReferers($link_id)
     {
         $stmt = $this->getDb()->prepare("SELECT referer FROM Clicks WHERE link_id = :li");

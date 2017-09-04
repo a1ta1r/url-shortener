@@ -8,6 +8,9 @@
 
 class Connection
 {
+    /**
+     * @return bool|PDO
+     */
     public static function getPDO()
     {
         $host = 'localhost';
@@ -15,9 +18,13 @@ class Connection
         $dsn = "mysql:host=$host;dbname=$dbname";
         $username = 'root';
         $password = 'root';
-        $pdo = new PDO($dsn, $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $pdo;
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $pdo;
+        } catch (PDOException $ex) {
+            return false;
+        }
     }
 }
 
