@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="UrlShortenerDB">
+	<table_data name="Users">
+		<row>
+			<field name="id">9</field>
+			<field name="name">Ann</field>
+			<field name="passhash">$2y$10$uJfoliPqueYo27v6.WptxOSNSW/IcmNaosn26zAAAiE2AobiN.0mC</field>
+			<field name="email">Ann@mail.ru</field>
+		</row>
+		<row>
+			<field name="id">10</field>
+			<field name="name">Ivan</field>
+			<field name="passhash">$2y$10$aEDnR3usf4m/hisEUs7oYelyxDk/qS.4d3aPQQDe8aeHO0OMU0h8K</field>
+			<field name="email">Ivan@mail.ru</field>
+		</row>
+		<row>
+			<field name="id">11</field>
+			<field name="name">John</field>
+			<field name="passhash">$2y$10$VKS9JaPxjvWNdYU5O3C7uOiDBNseW36l/KTWTa3Qp14O3pVbKgG66</field>
+			<field name="email">John@mail.ru</field>
+		</row>
+	</table_data>
+	<table_data name="Links">
+	<row>
+		<field name="id">20</field>
+		<field name="user_id">11</field>
+		<field name="full_link">https://vk.com</field>
+		<field name="short_link">x</field>
+	</row>
+	<row>
+		<field name="id">21</field>
+		<field name="user_id">11</field>
+		<field name="full_link">https://youtube.com</field>
+		<field name="short_link">c</field>
+	</row>
+	</table_data>
+	<table_data name="Clicks">
+		<row>
+			<field name="id">13</field>
+			<field name="link_id">20</field>
+			<field name="click_time">2017-09-03 16:21:03</field>
+			<field name="referer">xsolla.com</field>
+		</row>
+		<row>
+			<field name="id">14</field>
+			<field name="link_id">20</field>
+			<field name="click_time">2017-09-03 16:21:17</field>
+			<field name="referer">xsolla.com</field>
+		</row>
+		<row>
+			<field name="id">15</field>
+			<field name="link_id">21</field>
+			<field name="click_time">2017-09-03 16:21:24</field>
+			<field name="referer">xsolla.com</field>
+		</row>
+		<row>
+			<field name="id">19</field>
+			<field name="link_id">20</field>
+			<field name="click_time">2017-09-03 16:21:52</field>
+			<field name="referer">vk.com</field>
+		</row>
+		<row>
+			<field name="id">20</field>
+			<field name="link_id">21</field>
+			<field name="click_time">2017-09-03 16:21:53</field>
+			<field name="referer">vk.com</field>
+		</row>
+		<row>
+			<field name="id">21</field>
+			<field name="link_id">20</field>
+			<field name="click_time">2017-09-03 16:21:56</field>
+			<field name="referer">vk.com</field>
+		</row>
+		<row>
+			<field name="id">22</field>
+			<field name="link_id">20</field>
+			<field name="click_time">2017-09-03 16:22:06</field>
+			<field name="referer">referer.com</field>
+		</row>
+		<row>
+			<field name="id">23</field>
+			<field name="link_id">20</field>
+			<field name="click_time">2017-09-03 16:22:07</field>
+			<field name="referer">referer.com</field>
+		</row>
+		<row>
+			<field name="id">24</field>
+			<field name="link_id">20</field>
+			<field name="click_time">2017-09-03 16:22:08</field>
+			<field name="referer">referer.com</field>
+		</row>
+		<row>
+			<field name="id">27</field>
+			<field name="link_id">20</field>
+			<field name="click_time">2017-09-03 17:25:41</field>
+			<field name="referer">Unknown</field>
+		</row>
+	</table_data>
+</database>
+</mysqldump>

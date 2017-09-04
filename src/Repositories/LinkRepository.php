@@ -9,6 +9,7 @@
 namespace Shortener\Repositories;
 
 
+use PHPUnit\Runner\Exception;
 use Shortener\Models\Link;
 
 class LinkRepository extends BaseRepository
@@ -16,13 +17,17 @@ class LinkRepository extends BaseRepository
     /**
      * @param $user_id
      * @param $full_link
-     * @return Link
+     * @return bool|Link
      */
     public function addLink($user_id, $full_link)
     {
         $link = new Link(0, $user_id, $full_link, '');
-        $this->saveLink($link);
-        return $link;
+        try {
+            $this->saveLink($link);
+            return $link;
+        } catch (\PDOException $ex) {
+            return false;
+        }
     }
 
     /**
@@ -35,7 +40,7 @@ class LinkRepository extends BaseRepository
         $stmt->bindParam(':i', $id);
         $stmt->execute();
         $link = $stmt->fetchAll();
-        if ($link[0] != null) {
+        if (isset($link[0]['id'])) {
             return new Link($link[0]['id'], $link[0]['user_id'], $link[0]['full_link'], $link[0]['short_link']);
         } else {
             return false;
@@ -98,7 +103,7 @@ class LinkRepository extends BaseRepository
             } else {
                 $stmt = $this->getDb()->prepare("UPDATE Links SET short_link = :sl WHERE id = :i");
                 $stmt->bindParam(':sl', $link->short_link);
-                $stmt->bindParam(':i', intval($link->id));
+                $stmt->bindParam(':i', $link->id);
                 $stmt->execute();
             }
         }

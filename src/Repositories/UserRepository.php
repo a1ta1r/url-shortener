@@ -58,7 +58,7 @@ class UserRepository extends BaseRepository
         $stmt->bindParam(':e', $email);
         $stmt->execute();
         $user = $stmt->fetchAll();
-        if ($user[0] != null) {
+        if (isset($user[0]['id'])) {
             return new User($user[0]['id'], $user[0]['email'], $user[0]['name'], $user[0]['passhash']);
         } else {
             return false;

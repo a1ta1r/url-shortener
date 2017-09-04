@@ -38,7 +38,7 @@ class ClickRepository extends BaseRepository
 
     /**
      * @param $link_id
-     * @return array
+     * @return bool|array
      */
     public function getClicksByLinkId($link_id)
     {
@@ -46,6 +46,9 @@ class ClickRepository extends BaseRepository
         $stmt->bindParam(':li', $link_id);
         $stmt->execute();
         $raw = $stmt->fetchAll();
+        if (!isset($raw[0]['id'])) {
+            return false;
+        }
         $clicks = array();
         foreach ($raw as $c) {
             $clicks[] = new Click($c[0], $c[1], $c[2], $c[3]);
@@ -109,7 +112,7 @@ class ClickRepository extends BaseRepository
                     $clickTime = \DateTime::createFromFormat('Y-m-d H', $clickTime);
                     $clickTime = $clickTime->getTimestamp();
 
-                    if ($clickTime >= $from && $clickTime <= $to  + $this->day - $this->hour) {
+                    if ($clickTime >= $from && $clickTime <= $to + $this->day - $this->hour) {
                         $clickDate = date('Y-m-d H', $clickTime);
                         $filteredClickTimes[$clickDate]++;
                     }
@@ -123,7 +126,7 @@ class ClickRepository extends BaseRepository
                     $clickTime = \DateTime::createFromFormat('Y-m-d H:i', $clickTime);
                     $clickTime = $clickTime->getTimestamp();
 
-                    if ($clickTime >= $from && $clickTime <= $to  + $this->day - $this->minute) {
+                    if ($clickTime >= $from && $clickTime <= $to + $this->day - $this->minute) {
                         $clickDate = date('Y-m-d H:i', $clickTime);
                         $filteredClickTimes[$clickDate]++;
                     }
