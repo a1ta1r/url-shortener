@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS UrlShortenerDB;
-USE UrlShortenerDB;
-
 -- MySQL dump 10.13  Distrib 5.7.19, for Linux (x86_64)
 --
 -- Host: localhost    Database: UrlShortenerDB
@@ -33,7 +30,7 @@ CREATE TABLE `Clicks` (
   PRIMARY KEY (`id`),
   KEY `idx_link_id` (`link_id`),
   CONSTRAINT `Clicks_ibfk_1` FOREIGN KEY (`link_id`) REFERENCES `Links` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,7 +49,7 @@ CREATE TABLE `Links` (
   UNIQUE KEY `short_link` (`short_link`),
   KEY `idx_user_id` (`user_id`),
   CONSTRAINT `Links_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +66,7 @@ CREATE TABLE `Users` (
   `email` varchar(256) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `Users_email_uindex` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -81,4 +78,4 @@ CREATE TABLE `Users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-03 15:49:28
+-- Dump completed on 2017-09-05  7:00:41
